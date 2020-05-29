@@ -498,16 +498,20 @@ class Psbt {
         this.__CACHE,
         sighashTypes,
       );
-      Promise.resolve(keyPair.sign(hash)).then(signature => {
-        const partialSig = [
-          {
-            pubkey: keyPair.publicKey,
-            signature: bscript.signature.encode(signature, sighashType),
-          },
-        ];
-        this.data.updateInput(inputIndex, { partialSig });
-        resolve();
-      });
+      Promise.resolve(keyPair.sign(hash))
+        .then(signature => {
+          const partialSig = [
+            {
+              pubkey: keyPair.publicKey,
+              signature: bscript.signature.encode(signature, sighashType),
+            },
+          ];
+          this.data.updateInput(inputIndex, { partialSig });
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
   }
   toBuffer() {

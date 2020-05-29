@@ -602,6 +602,8 @@ export class Psbt {
 
           this.data.updateInput(inputIndex, { partialSig });
           resolve();
+        }).catch(err => {
+          reject(err);
         });
       },
     );
